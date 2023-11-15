@@ -7,7 +7,7 @@ const OAuth = () => {
         <FcGoogle className='text-2xl bg-white rounded-full mr-2' />
         Continue with Google
     </button>
-  )
+  )   
 }
 
 export default OAuth
