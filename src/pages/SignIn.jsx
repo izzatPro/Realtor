@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import {toast} from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 // This component is the same as SignUp, this component had be done first, then modified and replaced to SignUp and to forgotPassword
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +13,7 @@ export default function SignIn() {
     password: "",
   })
   const {email,password} = formData;
+  const navigate = useNavigate('/');
 
   function onChange(e){
     setFormData((prevState) =>({
@@ -17,6 +21,23 @@ export default function SignIn() {
       [e.target.id]: e.target.value,
     }))
   }
+
+  async function onSubmit(e){
+    e.preventDefault();
+    try{
+      const auth = getAuth();
+      //Если вход будет успешен он вернет true / false. Она сама сапостовляет с данными которые есть в твоей базе данных в Authorize
+      const userCredentials = await signInWithEmailAndPassword(auth,email,password);
+      //Если вернет true, то перенапрвь его на главную.
+      if(userCredentials.user){
+        navigate("/");
+      }
+    } catch(e){
+      toast.error("Bad user credentials")
+    }
+
+  }
+
 
   return (
     <section>
@@ -26,7 +47,7 @@ export default function SignIn() {
           <img src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?q=80&w=3473&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" className='w-full rounded-2xl' alt="key" />
           </div>
           <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-            <form action="" >
+            <form action="" onSubmit={onSubmit}>
               <input className='mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out' type="email" id="email" value={email} onChange={(e) => onChange(e)} placeholder='Email address'/>
               <div className='relative mb-6'>
               <input className=' w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out' type={showPassword ? 'text' : 'password'} id="password" value={password} onChange={(e) => onChange(e)} placeholder='Password'/>
