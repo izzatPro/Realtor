@@ -16,7 +16,9 @@ export default function SignUp() {
     email: "",
     password: "",
   })
+
   const {name, email,password} = formData;
+  
   const navigate = useNavigate();
 
   function onChange(e){
