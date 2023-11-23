@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 export function useAuthStatus() {
 
     const [loggedIn, setLoggedin] = useState(false);
-    //lading
+    //loading spinner
     const [checkingStatus, setCheckingStatus] = useState(true);
 
     useEffect(()=>{
